@@ -197,7 +197,8 @@ function getLocation() {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
     localData = latitude + "," + longitude;
-    console.log("Got", latitude, longitude);
+    pushNotification("We have got you location,Thanks")
+    // console.log("Got", latitude, longitude);
   }
   function failed() {
     console.log("failed");
