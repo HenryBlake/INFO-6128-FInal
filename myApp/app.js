@@ -6,19 +6,7 @@ var localData;
 let localDB;
 let reg;
 //IndexDB prepare part
-const myIndexDB = window.indexedDB.open("MyDB", 1);
-myIndexDB.onsuccess = (event) => {
-  console.log("Build success");
-  localDB = myIndexDB.result;
-  // console.log(localDB);
-};
-myIndexDB.onerror = (event) => {
-  console.log("Build failed");
-};
-myIndexDB.onupgradeneeded = (event) => {
-  const mydb = event.target.result;
-  const objectStore = mydb.createObjectStore("MyCats", { autoIncrement: true });
-};
+
 //Start of project
 $(document).ready(function () {
   db();
@@ -34,6 +22,21 @@ $(document).ready(function () {
 window.onload = () => {
   checkPermission();
   readySW();
+  const myIndexDB = window.indexedDB.open("MyDB", 1);
+  myIndexDB.onsuccess = (event) => {
+    console.log("Build success");
+    localDB = myIndexDB.result;
+    // console.log(localDB);
+  };
+  myIndexDB.onerror = (event) => {
+    console.log("Build failed");
+  };
+  myIndexDB.onupgradeneeded = (event) => {
+    const mydb = event.target.result;
+    const objectStore = mydb.createObjectStore("MyCats", {
+      autoIncrement: true,
+    });
+  };
 };
 //Import firebase config here.
 const db = () => {
@@ -191,7 +194,6 @@ function firebaseWrite(catobj) {
         if (!tags.includes("add-cats")) {
           console.log("get tags");
           reg.sync.register("add-cats");
-          
         }
       });
       console.log("Cant save online");
