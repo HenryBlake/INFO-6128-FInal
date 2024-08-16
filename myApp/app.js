@@ -187,7 +187,7 @@ function firebaseWrite(catobj) {
     addIndexDB(catobj);
     console.log("reg:", reg);
     if (reg) {
-      reg.sync.getTag().then((tags) => {
+      reg.sync.getTags().then((tags) => {
         if (!tags.includes("add-cats")) {
           console.log("get tags");
           this.swRegistration.sync.register("add-cats");
