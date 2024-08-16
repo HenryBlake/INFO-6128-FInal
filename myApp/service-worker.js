@@ -78,7 +78,7 @@ const addToFirebase = () => {
   const objectStore = transaction.objectStore("MyCats");
   const request=objectStore.getAll()
   request.onsuccess=(event)=>{
-    console.log(event)
-    firebaseWrite(event)
+    console.log("My data is:",event)
+    // firebaseWrite(event)
   }
 };
