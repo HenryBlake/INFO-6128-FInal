@@ -145,8 +145,7 @@ function getInput() {
         // isVac: isVac,
         isHungry: false,
       };
-      firebaseWrite(catObj);
-      addIndexDB(catObj);
+      catDB.add(catObj);
     } else {
       var catObj = {
         name: name,
@@ -342,7 +341,7 @@ const getBattery = () => {
     if (battery.level < 1) {
       pushNotification(
         "YOUR CATS are HUNGRY",
-        `Your battery is ${battery.level*100}%`
+        `Your battery is ${battery.level * 100}%`
       );
     }
   });
