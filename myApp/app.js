@@ -10,7 +10,7 @@ const myIndexDB = window.indexedDB.open("MyDB", 1);
 myIndexDB.onsuccess = (event) => {
   console.log("Build success");
   localDB = myIndexDB.result;
-  console.log(localDB);
+  // console.log(localDB);
 };
 myIndexDB.onerror = (event) => {
   console.log("Build failed");
@@ -176,6 +176,7 @@ function firebaseWrite(catobj) {
     addIndexDB(catobj);
     reg.sync.getTag().then((tags) => {
       if (!tags.includes("add-music")) {
+        console.log("get tags")
         this.swRegistration.sync.register("add-cats");
       }
     });
@@ -196,7 +197,7 @@ function firebaseReadChanges() {
   dbRef.onSnapshot((querySnapshot) => {
     querySnapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
-        console.log(change.doc.data());
+        // console.log(change.doc.data());
         const newCat = change.doc.data();
         appendListCats(newCat);
       }

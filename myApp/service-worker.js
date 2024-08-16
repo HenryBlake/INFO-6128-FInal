@@ -26,7 +26,7 @@ self.addEventListener("activate", (event) => {
   // Remove caches that are no longer necessary
   event.waitUntil(
     caches.keys().then((cacheNames) => {
-      console.log("Cache names:", cacheNames);
+      // console.log("Cache names:", cacheNames);
       cacheNames.forEach((item) => {
         if (item !== cacheName) {
           caches.delete(item);
