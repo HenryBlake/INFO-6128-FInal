@@ -33,6 +33,7 @@ $(document).ready(function () {
 //Ask user's permission.
 window.onload = () => {
   checkPermission();
+  readySW();
 };
 //Import firebase config here.
 const db = () => {
@@ -75,16 +76,26 @@ function regiServiceW() {
     navigator.serviceWorker
       .register("/service-worker.js", { scope: "/" })
       .then(function (Registration) {
+        console.log("Registration successful. Scope is :", Registration.scope);
+      })
+      .catch(function (error) {
+        console.log("Registration failed Error:", error);
+      });
+  }
+}
+function readySW() {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.ready
+      .then((Registration) => {
         if ("active" in Registration && "sync" in Registration) {
           // console.log("OffLine now")
           reg = Registration;
         } else {
           console.log("cant get registration");
         }
-        console.log("Registration successful. Scope is :", Registration.scope);
       })
       .catch(function (error) {
-        console.log("Registration failed Error:", error);
+        console.log("Ready failed Error:", error);
       });
   }
 }
@@ -174,14 +185,16 @@ function firebaseWrite(catobj) {
     dbRef.add(catobj);
   } else {
     addIndexDB(catobj);
-    console.log(reg)
-    reg.sync.getTag().then((tags) => {
-      if (!tags.includes("add-cats")) {
-        console.log("get tags")
-        this.swRegistration.sync.register("add-cats");
-      }
-    });
-    console.log("Cant save online");
+    console.log("reg:", reg);
+    if (reg) {
+      reg.sync.getTag().then((tags) => {
+        if (!tags.includes("add-cats")) {
+          console.log("get tags");
+          this.swRegistration.sync.register("add-cats");
+        }
+      });
+      console.log("Cant save online");
+    }
   }
 }
 function firebaseDelete() {}
