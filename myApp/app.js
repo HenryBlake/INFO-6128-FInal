@@ -162,10 +162,11 @@ function getInput() {
 }
 //DB wirte
 function firebaseWrite(catobj) {
-  if(navigator.onLine){
+  if (navigator.onLine) {
     dbRef.add(catobj);
-  }else{
-    console.log("Cant save online")
+  } else {
+    addIndexDB(catobj);
+    console.log("Cant save online");
   }
 }
 function firebaseDelete() {}
@@ -202,7 +203,7 @@ function getLocation() {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
     localData = latitude + "," + longitude;
-    pushNotification("We have got you location,Thanks")
+    pushNotification("We have got you location,Thanks");
     // console.log("Got", latitude, longitude);
   }
   function failed() {
@@ -344,7 +345,9 @@ const getBattery = () => {
     if (battery.level < 1) {
       pushNotification(
         "YOUR CATS are HUNGRY",
-        "Feed them by charging you phone"
+        `Your battery now is ${
+          battery.level * 100
+        }%,feed them by charging your phone.`
       );
     }
   });
