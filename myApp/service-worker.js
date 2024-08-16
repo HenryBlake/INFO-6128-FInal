@@ -73,7 +73,8 @@ self.addEventListener("sync", (event) => {
 });
 
 const addToFirebase = () => {
-  const myIndexDB = window.indexedDB.open("MyDB", 1);
+  // const myIndexDB = window.indexedDB.open("MyDB", 1);
+  const localDB=myIndexDB.result
   const transaction=localDB.transaction(["MyCats"])
   const objectStore = transaction.objectStore("MyCats");
   const request=objectStore.getAll()
