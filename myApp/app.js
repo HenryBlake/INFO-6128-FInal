@@ -190,7 +190,8 @@ function firebaseWrite(catobj) {
       reg.sync.getTags().then((tags) => {
         if (!tags.includes("add-cats")) {
           console.log("get tags");
-          this.reg.sync.register("add-cats");
+          reg.sync.register("add-cats");
+          
         }
       });
       console.log("Cant save online");
