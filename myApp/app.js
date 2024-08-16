@@ -9,6 +9,7 @@ const myIndexDB = window.indexedDB.open("MyDB", 1);
 myIndexDB.onsuccess = (event) => {
   console.log("Build success");
   localDB = myIndexDB.result;
+  console.log(localDB)
 };
 myIndexDB.onerror = (event) => {
   console.log("Build failed");
@@ -75,6 +76,7 @@ function regiServiceW() {
       .then(function (Registration) {
         if ("active" in Registration && "sync" in Registration) {
           console.log("OffLine now")
+          
         } else {
           console.log("online now")
         }
