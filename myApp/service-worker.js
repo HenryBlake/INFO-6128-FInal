@@ -104,6 +104,7 @@ function addCat() {
     .then(() => {
       //Get all locally saved musics.
       catDb.dbOffline.getAll().then((cats) => {
+        console.log(cats)
         //Open the online database
         catDb.dbOnline
           .open()
