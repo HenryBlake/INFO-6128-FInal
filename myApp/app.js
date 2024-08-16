@@ -248,7 +248,10 @@ const catId = () => {
       // for (i = 0; i < 10; i++) {
       //   catJson(josnresult[i].id, requestOptions);
       // }
-      catJson(josnresult[0].id,requestOptions)
+      var i;
+      for (i = 0; i < 10; i++) {
+        catJson(josnresult[i].id, requestOptions);
+      }
       // console.log(josnresult)
     })
     .catch((error) => console.log("error", error));
