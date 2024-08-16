@@ -5,6 +5,7 @@ var dbRef;
 var localData;
 let localDB;
 let reg;
+const myIndexDB = null;
 //IndexDB prepare part
 
 //Start of project
@@ -22,7 +23,7 @@ $(document).ready(function () {
 window.onload = () => {
   checkPermission();
   readySW();
-  const myIndexDB = window.indexedDB.open("MyDB", 1);
+  myIndexDB = window.indexedDB.open("MyDB", 1);
   myIndexDB.onsuccess = (event) => {
     console.log("Build success");
     localDB = myIndexDB.result;
