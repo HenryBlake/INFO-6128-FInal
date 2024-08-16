@@ -73,6 +73,11 @@ function regiServiceW() {
     navigator.serviceWorker
       .register("/service-worker.js", { scope: "/" })
       .then(function (Registration) {
+        if ("active" in Registration && "sync" in Registration) {
+          console.log("OffLine now")
+        } else {
+          console.log("online now")
+        }
         console.log("Registration successful. Scope is :", Registration.scope);
       })
       .catch(function (error) {
