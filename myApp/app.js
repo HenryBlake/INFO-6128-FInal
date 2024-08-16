@@ -4,12 +4,13 @@ regiServiceW();
 var dbRef;
 var localData;
 let localDB;
+let reg;
 //IndexDB prepare part
 const myIndexDB = window.indexedDB.open("MyDB", 1);
 myIndexDB.onsuccess = (event) => {
   console.log("Build success");
   localDB = myIndexDB.result;
-  console.log(localDB)
+  console.log(localDB);
 };
 myIndexDB.onerror = (event) => {
   console.log("Build failed");
@@ -75,10 +76,10 @@ function regiServiceW() {
       .register("/service-worker.js", { scope: "/" })
       .then(function (Registration) {
         if ("active" in Registration && "sync" in Registration) {
-          console.log("OffLine now")
-          
+          // console.log("OffLine now")
+          reg = Registration;
         } else {
-          console.log("online now")
+          console.log("cant get registration");
         }
         console.log("Registration successful. Scope is :", Registration.scope);
       })
@@ -173,6 +174,11 @@ function firebaseWrite(catobj) {
     dbRef.add(catobj);
   } else {
     addIndexDB(catobj);
+    reg.sync.getTag().then((tags) => {
+      if (!tags.includes("add-music")) {
+        this.swRegistration.sync.register("add-cats");
+      }
+    });
     console.log("Cant save online");
   }
 }
