@@ -1,13 +1,24 @@
+import catDB from "./js/db/music-db.js";
+
 //Rigester Service Worker
 regiServiceW();
 //General ref of database
 var dbRef;
 var localData;
 let localDB;
-let reg;
-var myIndexDB;
 //IndexDB prepare part
-
+const myIndexDB = window.indexedDB.open("MyDB", 1);
+myIndexDB.onsuccess = (event) => {
+  console.log("Build success");
+  localDB = event.target.result;
+};
+myIndexDB.onerror = (event) => {
+  console.log("Build failed:" + event.target.error.message);
+};
+myIndexDB.onupgradeneeded = (event) => {
+  const mydb = event.target.result;
+  const objectStore = mydb.createObjectStore("MyCats", { autoIncrement: true });
+};
 //Start of project
 $(document).ready(function () {
   db();
@@ -22,22 +33,6 @@ $(document).ready(function () {
 //Ask user's permission.
 window.onload = () => {
   checkPermission();
-  readySW();
-  myIndexDB = window.indexedDB.open("MyDB", 1);
-  myIndexDB.onsuccess = (event) => {
-    console.log("Build success");
-    localDB = myIndexDB.result;
-    // console.log(localDB);
-  };
-  myIndexDB.onerror = (event) => {
-    console.log("Build failed");
-  };
-  myIndexDB.onupgradeneeded = (event) => {
-    const mydb = event.target.result;
-    const objectStore = mydb.createObjectStore("MyCats", {
-      autoIncrement: true,
-    });
-  };
 };
 //Import firebase config here.
 const db = () => {
@@ -78,28 +73,12 @@ const clicks = () => {
 function regiServiceW() {
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker
-      .register("/service-worker.js", { scope: "/" })
+      .register("/service-worker.js", { scope: "/", type: 'module' })
       .then(function (Registration) {
         console.log("Registration successful. Scope is :", Registration.scope);
       })
       .catch(function (error) {
         console.log("Registration failed Error:", error);
-      });
-  }
-}
-function readySW() {
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.ready
-      .then((Registration) => {
-        if ("active" in Registration && "sync" in Registration) {
-          // console.log("OffLine now")
-          reg = Registration;
-        } else {
-          console.log("cant get registration");
-        }
-      })
-      .catch(function (error) {
-        console.log("Ready failed Error:", error);
       });
   }
 }
@@ -177,31 +156,16 @@ function getInput() {
         location: location,
         isHungry: false,
       };
-      firebaseWrite(catObj);
-      addIndexDB(catObj);
+
+      catDB.add(catObj);
     }
   }
   // });
 }
-//DB wirte
 function firebaseWrite(catobj) {
-  if (navigator.onLine) {
-    dbRef.add(catobj);
-  } else {
-    addIndexDB(catobj);
-    console.log("reg:", reg);
-    if (reg) {
-      reg.sync.getTags().then((tags) => {
-        if (!tags.includes("add-cats")) {
-          console.log("get tags");
-          reg.sync.register("add-cats");
-        }
-      });
-      console.log("Cant save online");
-    }
-  }
+  dbRef.add(catobj);
 }
-function firebaseDelete() {}
+function firebaseDelete() { }
 function firebaseReadOnce() {
   dbRef.get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
@@ -215,7 +179,7 @@ function firebaseReadChanges() {
   dbRef.onSnapshot((querySnapshot) => {
     querySnapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
-        // console.log(change.doc.data());
+        console.log(change.doc.data());
         const newCat = change.doc.data();
         appendListCats(newCat);
       }
@@ -235,7 +199,7 @@ function getLocation() {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
     localData = latitude + "," + longitude;
-    pushNotification("We have got you location,Thanks");
+    pushNotification("We have got you location,Thanks")
     // console.log("Got", latitude, longitude);
   }
   function failed() {
@@ -377,9 +341,7 @@ const getBattery = () => {
     if (battery.level < 1) {
       pushNotification(
         "YOUR CATS are HUNGRY",
-        `Your battery now is ${
-          battery.level * 100
-        }%,feed them by charging your phone.`
+        "Feed them by charging you phone"
       );
     }
   });

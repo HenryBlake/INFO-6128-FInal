@@ -1,81 +1,66 @@
-
-class MusicDB {
-    constructor() {
-        this.dbOnline = dbOnline;
-        this.dbOffline = dbOffline;
-        this.swController = null;
-        this.swRegistration = null;
-    }
-
-    open() {
-        return new Promise((resolve, reject) => {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.ready.then((registration) => {
-                    if ('active' in registration && 'sync' in registration) {
-                        this.dbOffline.open()
-                            .then(() => {
-                                this.swController = registration.active;
-                                this.swRegistration = registration;
-                                this.dbOnline.open().then(resolve).catch(reject);
-                            }).catch(() => {
-                                this.dbOnline.open().then(resolve).catch(reject);
-                            })
-                    } else {
-                        this.dbOnline.open().then(resolve).catch(reject);
-                    }
-                });
-            } else {
-                //Syntax 1
-                // this.dbOnline.open()
-                //     .then(() => { resolve() })
-                //     .catch((error) => { reject(error) });
-                //Syntax 2
-                this.dbOnline.open().then(resolve).catch(reject);
-            }
-
-        });
-    }
-
-    add(title, artist, hasFinished) {
-        if (navigator.onLine) {
-            return this.dbOnline.add(title, artist, hasFinished);
+class MyDB {
+  constructor() {
+    this.myIndexDB = null;
+    this.localDB=null;
+    this.myDB=null;
+    this.swRegistration = null;
+    this.objectStore=null;
+    this.transaction=null;
+  }
+  create() {
+    this.myIndexDB = window.indexedDB.open("MyDB", 1);
+    this.myIndexDB.onsuccess = (event) => {
+      console.log("Build success");
+    localDB = myIndexDB.result;
+      // console.log(localDB);
+    };
+    this.myIndexDB.onerror = (event) => {
+      console.log("Build failed");
+    };
+    this.myIndexDB.onupgradeneeded = (event) => {
+      this.mydb = event.target.result;
+        this. objectStore = this.mydb.createObjectStore("MyCats", {
+        autoIncrement: true,
+      });
+    };
+  }
+  add(catData){
+    this.transaction =this.localDB.transaction(["MyCats"], "readwrite");
+    this.transaction.oncomplete = (event) => {
+      console.log("save success", event);
+    };
+    this.transaction.onerror = (event) => {
+      console.log("Failed to save", event);
+    };
+    this.objectStore = transaction.objectStore("MyCats");
+    const request = objectStore.add(catData);
+  }
+  open(catData) {
+    return new Promise((resolve, reject) => {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.ready.then((registration) => {
+                if ('active' in registration && 'sync' in registration) {
+                    this.myDB().open()
+                        .then(() => {
+                            this.swRegistration = registration;
+                            this.add(catData)
+                        }).catch(() => {
+                            console.log("Failed")
+                        })
+                } else {
+                }
+            });
         } else {
-            this.swRegistration.sync.getTags()
-                .then((tags) => {
-                    if (!tags.includes('add-music')) {
-                        this.swRegistration.sync.register('add-music');
-                    }
-                });
-
-            return this.dbOffline.add(title, artist, hasFinished);
+            //Syntax 1
+            // this.dbOnline.open()
+            //     .then(() => { resolve() })
+            //     .catch((error) => { reject(error) });
+            //Syntax 2
+            this.dbOnline.open().then(resolve).catch(reject);
         }
-    }
 
-    getAll() {
-        if (navigator.onLine) {
-            return this.dbOnline.getAll();
-        } else {
-            return new Promise((resolve, reject) => {
-                reject('You must be connected to the web to get the data');
-            })
-        }
-    }
-
-    get(id) {
-        console.log('Music get:', id);
-    }
-
-    getByArtist(artist) {
-        console.log('Music getByArtist:', artist);
-    }
-
-    update(updatedMusic) {
-        console.log('Music update:', updatedMusic);
-    }
-
-    delete(id) {
-        console.log('Music delete:', id);
-    }
+    });
+}
 }
 
-export default new MusicDB();
+export default new MyDB();
