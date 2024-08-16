@@ -117,7 +117,7 @@ function addCat() {
                 .then(() => {
                   console.log("MyCatSWid:", cat);
                   //Delete music from locally
-                  // catDb.dbOffline.delete(cat.id);
+                  catDb.dbOffline.delete(cat.id);
                 })
                 .catch((error) => console.log(error));
             });
