@@ -160,8 +160,13 @@ function getInput() {
   }
   // });
 }
+//DB wirte
 function firebaseWrite(catobj) {
-  dbRef.add(catobj);
+  if(navigator.onLine){
+    dbRef.add(catobj);
+  }else{
+    console.log("Cant save online")
+  }
 }
 function firebaseDelete() {}
 function firebaseReadOnce() {
