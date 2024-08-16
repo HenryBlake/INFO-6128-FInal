@@ -111,10 +111,8 @@ function addCat() {
           .then(() => {
             //Save the musics online
             cats.forEach((cat) => {
-              catDb.dbOnline.firebaseWrite(cat);
-              console
-                .log("MyCatSWid:", cat)
-
+              console.log("Mycat00:",cat)
+              catDb.dbOnline.firebaseWrite(cat)
                 .then(() => {
                   console.log("MyCatSWid:", cat);
                   //Delete music from locally
