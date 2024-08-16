@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cat wiki!</title>
+    <!-- Improt js files -->
+    <script src="jquery-3.7.1.min.js" defer></script>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/onsenui/css/onsen-css-components.min.css"
+    />
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://www.gstatic.com/firebasejs/10.4.0/firebase-app-compat.js"
+      defer
+    ></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/10.4.0/firebase-auth-compat.js"
+      defer
+    ></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/10.4.0/firebase-database-compat.js"
+      defer
+    ></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"
+      defer
+    ></script>
+    <script src="app.js" defer></script>
+
+    <!-- <script src="service-worker.js" defer></script> -->
+  </head>
+  <body>
+    <!-- Page1 -->
+    <ons-page id="page1" style="margin-top: 0">
+      <!-- Toolbar area -->
+      <ons-toolbar>
+        <div class="left">
+          <ons-toolbar-button
+            id="setting_btn"
+            icon="ion-ios-notifications"
+            style="color: black"
+            page="settings"
+          ></ons-toolbar-button>
+        </div>
+        <div class="center toolbar__center toolbar__title">My Cat Wiki!</div>
+      </ons-toolbar>
+      <!-- Tabbar area -->
+      <ons-tabbar id="myTabbar" swipeable postion="auto">
+        <ons-tab
+          page="home_page"
+          label="Home"
+          icon="ion-ios-home,material:md-home"
+          active
+        ></ons-tab>
+        <ons-tab page="add_page" label="Add" icon="ion-ios-add"></ons-tab>
+        <ons-tab page="my_page" label="My Cats" icon="ion-ios-heart"></ons-tab>
+      </ons-tabbar>
+    </ons-page>
+  </body>
+  <!-- Pages/Web fragments -->
+  <!-- home -->
+  <template id="home_page">
+    <ons-page style="text-align: center">
+      <ons-search-input
+        id="searchInput"
+        placeholder="Search Cats"
+        style="margin-top: 10px"
+      ></ons-search-input>
+      <ons-card id="home_ons_page" style="text-align: center"></ons-card>
+    </ons-page>
+  </template>
+  <!-- add -->
+  <template id="add_page">
+    <ons-page style="text-align: center">
+      <p style="text-align: center">This is my add page</p>
+      <ons-input
+        class="userInput"
+        id="catName"
+        type="text"
+        placeholder="Name"
+        min="1"
+        max="30"
+        style="border: solid 1px; border-radius: 1px; opacity: 30%"
+      ></ons-input
+      ><br />
+      <ons-input
+        class="userInput"
+        id="catAge"
+        type="number"
+        placeholder="Age"
+        min="1"
+        style="
+          border: solid 1px;
+          border-radius: 1px;
+          opacity: 30%;
+          width: fit-content;
+        "
+      ></ons-input
+      ><br />
+      <ons-input
+        class="userInput"
+        id="catBirthday"
+        type="date"
+        placeholder="Birthday"
+        min="1"
+        max="30"
+        style="
+          border: solid 1px;
+          border-radius: 1px;
+          opacity: 30%;
+          width: fit-content;
+        "
+      ></ons-input
+      ><br />
+      <ons-input
+        class="userInput"
+        id="catFood"
+        type="text"
+        placeholder="Food"
+        min="1"
+        max="30"
+        style="border: solid 1px; border-radius: 1px; opacity: 30%"
+      ></ons-input>
+      <p id="myLocation">Get your loctaion</p>
+      <ons-button id="getLocal">Get Location</ons-button><br />
+      <!-- <p>Vaccinations Taken?</p>
+      <ons-switch id="isVac"></ons-switch><br /> -->
+      <ons-button id="submitBtn">Submit</ons-button>
+    </ons-page>
+  </template>
+  <!-- cats -->
+  <template id="my_page">
+    <ons-page>
+      <p id="defultP" style="text-align: center">No Data</p>
+      <!-- <div><ons-switch></ons-switch></div> -->
+       <ons-list id="myList">
+       </ons-list>
+    </ons-page>
+  </template>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "Cat Wiki!",
+  "short_name": "CatW",
+  "start_url": "/",
+  "display": "fullscreen",
+  "background_color": "#000",
+  "theme_color": "white",
+  "orientation": "any",
+  "description": "An app where you can see all the cats!"
+}
