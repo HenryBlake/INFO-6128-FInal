@@ -245,9 +245,10 @@ const catId = () => {
     .then((response) => response.text())
     .then((result) => JSON.parse(result))
     .then((josnresult) => {
-      for (i = 0; i < 10; i++) {
-        catJson(josnresult[i].id, requestOptions);
-      }
+      // for (i = 0; i < 10; i++) {
+      //   catJson(josnresult[i].id, requestOptions);
+      // }
+      catJson(josnresult[0].id,requestOptions)
       // console.log(josnresult)
     })
     .catch((error) => console.log("error", error));
