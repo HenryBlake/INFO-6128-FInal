@@ -65,7 +65,9 @@ self.addEventListener("notificationclick", (e) => {
 
 //Sync
 self.addEventListener("sync", (event) => {
+  console.log("into sysnc")
   if (event.tag === "add-cats") {
+    console.log("get tag:",event.tag);
     addToFirebase()
   }
 });
