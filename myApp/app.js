@@ -5,7 +5,7 @@ var dbRef;
 var localData;
 let localDB;
 let reg;
-const myIndexDB = null;
+var myIndexDB;
 //IndexDB prepare part
 
 //Start of project
