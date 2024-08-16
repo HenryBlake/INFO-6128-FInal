@@ -179,7 +179,7 @@ function firebaseReadChanges() {
   dbRef.onSnapshot((querySnapshot) => {
     querySnapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
-        console.log(change.doc.data());
+        // console.log(change.doc.data());
         const newCat = change.doc.data();
         appendListCats(newCat);
       }
@@ -342,7 +342,7 @@ const getBattery = () => {
     if (battery.level < 1) {
       pushNotification(
         "YOUR CATS are HUNGRY",
-        "Feed them by charging you phone"
+        `Your battery is ${battery.level*100}%`
       );
     }
   });
