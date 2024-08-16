@@ -77,6 +77,6 @@ const addToFirebase = () => {
   const request=objectStore.getAll()
   request.onsuccess=(event)=>{
     console.log(event)
-    // firebaseWrite()
+    firebaseWrite(event)
   }
 };
