@@ -73,7 +73,7 @@ const clicks = () => {
 function regiServiceW() {
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker
-      .register("/service-worker.js", { scope: "/", type: 'module' })
+      .register("/service-worker.js", { scope: "/", type: "module" })
       .then(function (Registration) {
         console.log("Registration successful. Scope is :", Registration.scope);
       })
@@ -165,7 +165,7 @@ function getInput() {
 function firebaseWrite(catobj) {
   dbRef.add(catobj);
 }
-function firebaseDelete() { }
+function firebaseDelete() {}
 function firebaseReadOnce() {
   dbRef.get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
@@ -199,7 +199,7 @@ function getLocation() {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
     localData = latitude + "," + longitude;
-    pushNotification("We have got you location,Thanks")
+    pushNotification("We have got you location,Thanks");
     // console.log("Got", latitude, longitude);
   }
   function failed() {
