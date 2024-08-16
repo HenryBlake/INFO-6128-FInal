@@ -67,7 +67,60 @@ class CatDB {
     };
 
     //delete 
-    
+    delete(id){
+        return new Promise((resolve, reject) => {
+            if (!this.isAvailable) {
+                reject('Database not opened!');
+            }
+
+            //Transaction handles
+            const transaction = this.db.transaction(['MyCats'], 'readwrite');
+            transaction.onerror = (event) => {
+                reject(event.target.error.message);
+            }
+
+            //Get the store
+            const store = transaction.objectStore('MyCats');
+            const request = store.delete(id);
+
+            request.onerror = (event) => {
+                reject(event.target.error.message);
+            }
+
+            request.onsuccess = (event) => {
+                resolve();
+            }
+
+        })
+    }
+
+    getAll(){
+        return new Promise((resolve, reject) => {
+            if (!this.isAvailable) {
+                reject('Database not opened!');
+            }
+
+            //Transaction handles
+            const transaction = this.db.transaction(['MyCats'], 'readwrite');
+            transaction.onerror = (event) => {
+                reject(event.target.error.message);
+            }
+
+            //Get the store
+            const store = transaction.objectStore('MyCats');
+            const request = store.getAll();
+
+            request.onerror = (event) => {
+                reject(event.target.error.message);
+            }
+
+            request.onsuccess = (event) => {
+                resolve();
+            }
+
+        })
+
+    }
 
 }
 

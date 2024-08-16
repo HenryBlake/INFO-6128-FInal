@@ -1,4 +1,4 @@
-import catDB from "./js/db/music-db.js";
+import catDB from "./js/db/cat-db.js";
 
 //Rigester Service Worker
 regiServiceW();
@@ -245,9 +245,6 @@ const catId = () => {
     .then((response) => response.text())
     .then((result) => JSON.parse(result))
     .then((josnresult) => {
-      // for (i = 0; i < 10; i++) {
-      //   catJson(josnresult[i].id, requestOptions);
-      // }
       var i;
       for (i = 0; i < 10; i++) {
         catJson(josnresult[i].id, requestOptions);

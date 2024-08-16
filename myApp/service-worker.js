@@ -1,4 +1,5 @@
 // service-worker.js
+import catDb from './js/db/cat-db.js';
 import musicDB from './js/db/music-db.js';
 
 const cacheName = "my-cache-v3";
@@ -102,25 +103,26 @@ self.addEventListener('sync', (event) => {
 
 
 function addCat() {
-  console.log('[SW]Add music!!!');
-  console.log('[SW]Music DB:', musicDB);
+  console.log('[SW]Add cat!!!');
+  console.log('[SW]Cats DB:', catDb);
 
-  musicDB.dbOffline.open()
+  catDb.dbOffline.open()
     .then(() => {
 
       //Get all locally saved musics.
-      musicDB.dbOffline.getAll()
-        .then((musics) => {
+      catDb.dbOffline.getAll()
+        .then((cats) => {
 
           //Open the online database
-          musicDB.dbOnline.open()
+          catDb.dbOnline.open()
             .then(() => {
               //Save the musics online
-              musics.forEach((music) => {
-                musicDB.dbOnline.add(music.title, music.artist, music.hasFinished)
+              cats.forEach((cat) => {
+                catDb.dbOnline.firebaseWrite(cat)
                   .then(() => {
+                    console.log("MyCatSWid:",cat)
                     //Delete music from locally
-                    musicDB.dbOffline.delete(music.id);
+                    // catDb.dbOffline.delete(cat.id);
                   })
                   .catch((error) => console.log(error));
               });
