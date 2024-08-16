@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cat wiki!</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/myApp/favicon_package_v0.16/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/myApp/favicon_package_v0.16/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/myApp/favicon_package_v0.16/favicon-16x16.png" />
+    <link rel="mask-icon" href="/myApp/favicon_package_v0.16/safari-pinned-tab.svg" color="#5bbad5" />
+    <meta name="msapplication-TileColor" content="#2b5797" />
+    <meta name="theme-color" content="#ffffff" />
     <!-- Improt js files -->
     <script src="jquery-3.7.1.min.js" defer></script>
     <link rel="manifest" href="manifest.json" />
@@ -85,7 +91,12 @@
         placeholder="Name"
         min="1"
         max="30"
-        style="border: solid 1px; border-radius: 1px; opacity: 30%;margin-top: 5px;"
+        style="
+          border: solid 1px;
+          border-radius: 1px;
+          opacity: 30%;
+          margin-top: 5px;
+        "
       ></ons-input
       ><br />
       <ons-input
@@ -126,13 +137,19 @@
         placeholder="Food"
         min="1"
         max="30"
-        style="border: solid 1px; border-radius: 1px; opacity: 30%;margin-top: 5px;"
+        style="
+          border: solid 1px;
+          border-radius: 1px;
+          opacity: 30%;
+          margin-top: 5px;
+        "
       ></ons-input>
-      <p id="myLocation" style="margin-top: 5px;">Get your loctaion</p>
-      <ons-button id="getLocal" style="margin-top: 5px;">Get Location</ons-button><br />
+      <p id="myLocation" style="margin-top: 5px">Get your loctaion</p>
+      <ons-button id="getLocal" style="margin-top: 5px">Get Location</ons-button
+      ><br />
       <!-- <p>Vaccinations Taken?</p>
       <ons-switch id="isVac"></ons-switch><br /> -->
-      <ons-button id="submitBtn" style="margin-top: 5px;">Submit</ons-button>
+      <ons-button id="submitBtn" style="margin-top: 5px">Submit</ons-button>
     </ons-page>
   </template>
   <!-- cats -->
@@ -140,8 +157,7 @@
     <ons-page>
       <p id="defultP" style="text-align: center">No Data</p>
       <!-- <div><ons-switch></ons-switch></div> -->
-       <ons-list id="myList">
-       </ons-list>
+      <ons-list id="myList"> </ons-list>
     </ons-page>
   </template>
 </html>
