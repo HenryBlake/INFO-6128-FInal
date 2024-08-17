@@ -7,18 +7,18 @@ var dbRef;
 var localData;
 let localDB;
 //IndexDB prepare part
-const myIndexDB = window.indexedDB.open("MyDB", 1);
-myIndexDB.onsuccess = (event) => {
-  console.log("Build success");
-  localDB = event.target.result;
-};
-myIndexDB.onerror = (event) => {
-  console.log("Build failed:" + event.target.error.message);
-};
-myIndexDB.onupgradeneeded = (event) => {
-  const mydb = event.target.result;
-  const objectStore = mydb.createObjectStore("MyCats", { autoIncrement: true });
-};
+// const myIndexDB = window.indexedDB.open("MyDB", 1);
+// myIndexDB.onsuccess = (event) => {
+//   console.log("Build success");
+//   localDB = event.target.result;
+// };
+// myIndexDB.onerror = (event) => {
+//   console.log("Build failed:" + event.target.error.message);
+// };
+// myIndexDB.onupgradeneeded = (event) => {
+//   const mydb = event.target.result;
+//   const objectStore = mydb.createObjectStore("MyCats", { autoIncrement: true });
+// };
 //Start of project
 $(document).ready(function () {
   db();
@@ -51,13 +51,52 @@ const db = () => {
   dbRef = myDb.collection("Project");
 };
 //All clicks are here
+// const submitBtn = document.getElementById("submitBtn");
+// // if(submitBtn){
+//   submitBtn.addEventListener('click', () => {
+//   getInput();
+// });
+// // }
+
+
+
 const clicks = () => {
   const submitBtn = document.getElementById("submitBtn");
-  submitBtn.addEventListener("click", () => {
-    getInput();
+  // if(submitBtn){
+  submitBtn.addEventListener('click', () => {
+    var name = $("#catName").val();
+    var age = $("#catAge").val();
+    var birthday = $("#catBirthday").val();
+    var favFood = $("#catFood").val();
+    var location = localData;
+    // var isVac = $("#isVac").val();
+    var isHungry = false;
 
-    // console.log("Submitsted");
+    if (name === "" || age === "" || birthday === "" || favFood === "") {
+      alert("You need fill all info");
+    } else {
+      if (location == undefined) {
+        location = "unknow";
+      }
+      var catObj = {
+        id: Date.now(),
+        name: name,
+        age: age,
+        birthday: birthday,
+        favFood: favFood,
+        location: location,
+        isHungry: false,
+      };
+
+      catDB.open().then(() => {
+        catDB.add(catObj);
+      })
+
+
+    }
   });
+  // }
+
   const localBtn = document.getElementById("getLocal");
   localBtn.addEventListener("click", () => {
     pushNotification(
@@ -73,7 +112,7 @@ const clicks = () => {
 function regiServiceW() {
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker
-      .register("/service-worker.js", { scope: "/", type: "module" })
+      .register("/service-worker.js", { scope: "/", type: 'module' })
       .then(function (Registration) {
         console.log("Registration successful. Scope is :", Registration.scope);
       })
@@ -145,7 +184,8 @@ function getInput() {
         // isVac: isVac,
         isHungry: false,
       };
-      catDB.add(catObj);
+      firebaseWrite(catObj);
+      addIndexDB(catObj);
     } else {
       var catObj = {
         name: name,
@@ -156,7 +196,11 @@ function getInput() {
         isHungry: false,
       };
 
-      catDB.add(catObj);
+
+      catDB.open().then(() => {
+        catDB.add(catObj);
+      })
+
     }
   }
   // });
@@ -164,7 +208,7 @@ function getInput() {
 function firebaseWrite(catobj) {
   dbRef.add(catobj);
 }
-function firebaseDelete() {}
+function firebaseDelete() { }
 function firebaseReadOnce() {
   dbRef.get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
@@ -178,7 +222,7 @@ function firebaseReadChanges() {
   dbRef.onSnapshot((querySnapshot) => {
     querySnapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
-        // console.log(change.doc.data());
+        console.log(change.doc.data());
         const newCat = change.doc.data();
         appendListCats(newCat);
       }
@@ -198,7 +242,7 @@ function getLocation() {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
     localData = latitude + "," + longitude;
-    pushNotification("We have got you location,Thanks");
+    pushNotification("We have got you location,Thanks")
     // console.log("Got", latitude, longitude);
   }
   function failed() {
@@ -244,8 +288,7 @@ const catId = () => {
     .then((response) => response.text())
     .then((result) => JSON.parse(result))
     .then((josnresult) => {
-      var i;
-      for (i = 0; i < 10; i++) {
+      for (var i = 0; i < 10; i++) {
         catJson(josnresult[i].id, requestOptions);
       }
       // console.log(josnresult)
@@ -325,11 +368,8 @@ function appendErr(err) {
 //Add data to indexDB
 const addIndexDB = (catData) => {
   const transaction = localDB.transaction(["MyCats"], "readwrite");
-  transaction.oncomplete = (event) => {
-    console.log("save success", event);
-  };
   transaction.onerror = (event) => {
-    console.log("Failed to save", event);
+    console.log("transaction error", event);
   };
   const objectStore = transaction.objectStore("MyCats");
   const request = objectStore.add(catData);
@@ -341,7 +381,7 @@ const getBattery = () => {
     if (battery.level < 1) {
       pushNotification(
         "YOUR CATS are HUNGRY",
-        `Your battery is ${battery.level * 100}%`
+        "Feed them by charging you phone"
       );
     }
   });

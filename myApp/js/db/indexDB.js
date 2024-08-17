@@ -10,7 +10,7 @@ class CatDB {
             //validates whether the indexedDB onject is available
             if (indexedDB) {
                 //Can not back to the previous database version
-                const request = indexedDB.open('Music', 1);//databaseName,version
+                const request = indexedDB.open('MyDB', 1);//databaseName,version
 
                 //Handles the error when opening/creating the database
                 request.onerror = (event) => {
@@ -34,12 +34,7 @@ class CatDB {
                 request.onupgradeneeded = (event) => {
                     const db = event.target.result;
 
-                    const objectStore = db.createObjectStore('MusicList', { keyPath: 'id' });
-
-                    //Creates the indexs
-                    objectStore.createIndex('title', 'title');
-                    objectStore.createIndex('artist', 'artist');
-
+                    const objectStore = db.createObjectStore('MyCats', { keyPath: 'id' });
 
                 }
 
@@ -55,19 +50,62 @@ class CatDB {
 
     //Add data to indexDB
     addIndexDB(catData) {
-        const transaction = localDB.transaction(["MyCats"], "readwrite");
-        transaction.oncomplete = (event) => {
-            console.log("save success", event);
-        };
-        transaction.onerror = (event) => {
-            console.log("Failed to save", event);
-        };
-        const objectStore = transaction.objectStore("MyCats");
-        const request = objectStore.add(catData);
+        return new Promise((resolve, reject) => {
+            if (!this.isAvailable) {
+                reject('Database not opened!')
+            }
+            console.log("start insert into indexDB:", catData);
+
+            const transaction = this.db.transaction(["MyCats"], "readwrite");
+            transaction.onerror = (event) => {
+                console.log('[Transaction] Error:', event);
+                return;
+            };
+            const objectStore = transaction.objectStore("MyCats");
+            const request = objectStore.add(catData);
+
+            request.onerror = (event) => {
+                reject(event.target.error.message);
+            }
+
+            request.onsuccess = (event) => {
+                resolve();
+            }
+        })
     };
 
+
+    getAll() {
+        return new Promise((resolve, reject) => {
+            if (!this.isAvailable) {
+                reject('Database not opened!')
+            }
+
+            //Transaction handles
+            const transaction = this.db.transaction(['MyCats'], 'readonly');
+            transaction.onerror = (event) => {
+                console.log('Error:', error);
+                reject(event.target.error.message);
+            }
+
+            //Store handles
+            const store = transaction.objectStore('MyCats');
+            const request = store.getAll();
+
+            request.onerror = (event) => {
+                reject(event.target.error.message);
+            }
+
+            request.onsuccess = (event) => {
+                resolve(event.target.result);
+            }
+
+        })
+
+    }
+
     //delete 
-    delete(id){
+    delete(id) {
         return new Promise((resolve, reject) => {
             if (!this.isAvailable) {
                 reject('Database not opened!');
@@ -92,34 +130,6 @@ class CatDB {
             }
 
         })
-    }
-
-    getAll(){
-        return new Promise((resolve, reject) => {
-            if (!this.isAvailable) {
-                reject('Database not opened!');
-            }
-
-            //Transaction handles
-            const transaction = this.db.transaction(['MyCats'], 'readwrite');
-            transaction.onerror = (event) => {
-                reject(event.target.error.message);
-            }
-
-            //Get the store
-            const store = transaction.objectStore('MyCats');
-            const request = store.getAll();
-
-            request.onerror = (event) => {
-                reject(event.target.error.message);
-            }
-
-            request.onsuccess = (event) => {
-                resolve();
-            }
-
-        })
-
     }
 
 }

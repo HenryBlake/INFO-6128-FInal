@@ -12,6 +12,7 @@ class CatDB {
         return new Promise((resolve, reject) => {
             try {
                 // Your web app's Firebase configuration
+
                 const firebaseConfig = {
                     apiKey: "AIzaSyCA0pyxRhCJHTas6lUvydkB7L1kBJiDYQs",
                     authDomain: "info-6128-e3339.firebaseapp.com",
@@ -21,6 +22,7 @@ class CatDB {
                     appId: "1:236321873138:web:d07724b5701c7b3448c46b",
                     measurementId: "G-8F04ZSLQF6",
                   };
+
 
                 // Initialize Firebase
                 const app = initializeApp(firebaseConfig);
@@ -44,19 +46,50 @@ class CatDB {
     };
 
     firebaseWrite(catobj) {
-        dbRef.add(catobj);
+        return new Promise((resolve, reject) => {
+            if (!this.isAvailable) {
+                reject('Database not opened');
+            }
+
+            //connects to the Firebase collection
+            const dbCollection = collection(this.db, 'Project');
+
+            //includes the new object to the collection
+            addDoc(dbCollection, catobj)
+                .then((docRef) => {
+                    resolve();
+                })
+                .catch((error) => {
+                    reject(error.message);
+                })
+        });
     };
 
-    firebaseDelete() { };
+    getAll() {
+        return new Promise((resolve, reject) => {
+            if (!this.isAvailable) {
+                reject('Database not opened!');
+            }
+            //connects to the Firebase collection
+            const dbCollection = collection(this.db, 'Project');
 
-    firebaseReadOnce() {
-        dbRef.get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                const catData = doc.data();
-                appendListCats(catData);
-                // console.log(doc.data())
-            });
-        });
+            //gets the data from the collection
+            getDocs(dbCollection)
+                .then((querySnapShot) => {
+                    const result = [];
+                    querySnapShot.forEach((doc) => {
+                        const data = doc.data();
+                        data.id = doc.id; 
+                        result.push(data);
+                    })
+                    resolve(result);
+                })
+                .catch((error) => {
+                    reject(error.message);
+                }
+                );
+
+        })
     }
 
 }

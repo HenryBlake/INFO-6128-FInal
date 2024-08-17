@@ -30,11 +30,6 @@ class CatDB {
                     }
                 });
             } else {
-                //Syntax 1
-                // this.dbOnline.open()
-                //     .then(() => { resolve() })
-                //     .catch((error) => { reject(error) });
-                //Syntax 2
                 this.dbOnline.open().then(resolve).catch(reject);
             }
 
@@ -42,8 +37,10 @@ class CatDB {
     }
 
     add(catData) {
+        console.log("Start add data:",catData);
         if (navigator.onLine) {
-            return this.dbOnline.firebaseWrite(catData);
+             this.dbOnline.firebaseWrite(catData);
+             console.log("add to firebase:",catData);
         } else {
             this.swRegistration.sync.getTags()
                 .then((tags) => {
@@ -52,7 +49,8 @@ class CatDB {
                     }
                 });
 
-            return this.dbOffline.addIndexDB(catData);
+             this.dbOffline.addIndexDB(catData);
+             console.log("add to indexDB:",catData);
         }
     }
 
